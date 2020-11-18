@@ -58,4 +58,14 @@ async def pull_requests(ctx, repoName, state): # !git pull_requests MLH-Fellowsh
 			await ctx.send('Pull Request Title: ' + pr.title + '\nPull Request Number: ' + str(pr.number) +'\nPull Request Link: https://github.com/' + repoName + '/pull/' + str(pr.number))
 
 
+# create issue with assignee
+
+@bot.command()
+async def create_issue(ctx, repoName,title, username): # !git create_issue MLH-Fellowship/github-discord-bot issue_title Laurell876
+	repo = g.get_repo(repoName)
+	created_issue = repo.create_issue(title=title, assignee=username)
+	await ctx.send('Issue Title: ' + created_issue.title + '\nIssue Number: ' + str(created_issue.number) +'\nIssue Link: https://github.com/' + repoName + '/issues/' + str(created_issue.number))
+
+
+
 bot.run(DISCORD_TOKEN)
