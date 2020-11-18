@@ -32,15 +32,14 @@ async def create_repo(ctx, repoName): #!git create_repo repo1
 	await ctx.send("repository "+repoName+ " created!")
 
 
-# display open issues
+# display open and closed issues
 @bot.command()
-async def open_issues(ctx):
-	repo = g.get_repo("MLH-Fellowship/github-discord-bot")
-	issues = repo.get_issues(state="open")
+async def issues(ctx, repoName, state): # !git issues MLH-Fellowship/github-discord-bot open/closed
+	print(state)
+	repo = g.get_repo(repoName)
+	issues = repo.get_issues(state=state)
 	for i in issues:
 		await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number))
-
-
 
 
 bot.run(DISCORD_TOKEN)
