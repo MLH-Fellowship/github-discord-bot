@@ -13,14 +13,7 @@ g = Github(GITHUB_TOKEN)
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!git ')
 
-# get current user
-
 user = g.get_user()
-print(user.name) 
-
-# for repo in user.get_repos():
-#     print(repo.name)
-
 
 @bot.command()
 async def hello(ctx): #!git hello
@@ -31,6 +24,14 @@ async def create_repo(ctx, repoName): #!git create_repo repo1
 	repo = user.create_repo(repoName)
 	await ctx.send("repository "+repoName+ " created!")
 
+# create a new branch
+
+@bot.command()
+async def create_branch(ctx, repoName, sourceBranch, targetBranch): #!git create_branch ddd123-collab/repository1 main branch2
+	repo = g.get_repo(repoName)
+	source = repo.get_branch(sourceBranch)
+	repo.create_git_ref(ref=f"refs/heads/{targetBranch}", sha=source.commit.sha)
+	await ctx.send("branch "+targetBranch+" created!")
 
 # display open and closed issues
 
