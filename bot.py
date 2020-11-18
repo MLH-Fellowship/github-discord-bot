@@ -22,7 +22,7 @@ async def hello(ctx): #!git hello
 @bot.command()
 async def create_repo(ctx, repoName): #!git create_repo repo1
 	repo = user.create_repo(repoName)
-	await ctx.send("repository "+repoName+ " created!")
+	await ctx.send("repository "+repoName+ " created!\n"+'Link: https://github.com/'+user.login+'/'+repoName)
 
 # create a new branch
 
@@ -31,7 +31,7 @@ async def create_branch(ctx, repoName, sourceBranch, targetBranch): #!git create
 	repo = g.get_repo(repoName)
 	source = repo.get_branch(sourceBranch)
 	repo.create_git_ref(ref=f"refs/heads/{targetBranch}", sha=source.commit.sha)
-	await ctx.send("branch "+targetBranch+" created!")
+	await ctx.send("branch "+targetBranch+" created!\n"+'Link: https://github.com/'+repoName+'/tree/'+targetBranch)
 
 # display open and closed issues
 
