@@ -33,13 +33,29 @@ async def create_repo(ctx, repoName): #!git create_repo repo1
 
 
 # display open and closed issues
+
 @bot.command()
-async def issues(ctx, repoName, state): # !git issues MLH-Fellowship/github-discord-bot open/closed
-	print(state)
+async def issues(ctx, repoName, state): # !git issues MLH-Fellowship/github-discord-bot open
 	repo = g.get_repo(repoName)
 	issues = repo.get_issues(state=state)
-	for i in issues:
-		await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number))
+	if(issues.totalCount == 0):
+		await ctx.send("There are no issues that match your query")
+	else: 
+		for i in issues:
+			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: https://github.com/' + repoName + '/issues/' + str(i.number))
+
+
+# display open pull requests
+
+@bot.command()
+async def pull_requests(ctx, repoName, state): # !git pull_requests MLH-Fellowship/github-discord-bot open
+	repo = g.get_repo(repoName)
+	pulls = repo.get_pulls(state=state, sort='created')
+	if(pulls.totalCount == 0):
+		await ctx.send("There are no pull requests that match your query")
+	else:
+		for pr in pulls:
+			await ctx.send('Pull Request Title: ' + pr.title + '\nPull Request Number: ' + str(pr.number) +'\nPull Request Link: https://github.com/' + repoName + '/pull/' + str(pr.number))
 
 
 bot.run(DISCORD_TOKEN)
