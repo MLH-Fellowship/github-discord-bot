@@ -37,4 +37,9 @@ async def on_message(message):
 	if message.content == "hello":
 		await message.channel.send("hey dirtbag")
 '''
+
+
+# display open issues
+
+
 bot.run(DISCORD_TOKEN)
