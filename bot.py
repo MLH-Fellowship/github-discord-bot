@@ -34,7 +34,7 @@ async def create_branch(ctx, repoName, sourceBranch, targetBranch): #!git create
 	await ctx.send("branch "+targetBranch+" created!")
 
 # display open and closed issues
-
+# TODO: add default state
 @bot.command()
 async def issues(ctx, repoName, state): # !git issues MLH-Fellowship/github-discord-bot open
 	repo = g.get_repo(repoName)
