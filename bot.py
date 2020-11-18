@@ -18,8 +18,8 @@ bot = commands.Bot(command_prefix='!git ')
 user = g.get_user()
 print(user.name) 
 
-for repo in user.get_repos():
-    print(repo.name)
+# for repo in user.get_repos():
+#     print(repo.name)
 
 
 @bot.command()
@@ -30,5 +30,17 @@ async def hello(ctx): #!git hello
 async def create_repo(ctx, repoName): #!git create_repo repo1
 	repo = user.create_repo(repoName)
 	await ctx.send("repository "+repoName+ " created!")
+
+
+# display open issues
+@bot.command()
+async def open_issues(ctx):
+	repo = g.get_repo("MLH-Fellowship/github-discord-bot")
+	issues = repo.get_issues(state="open")
+	for i in issues:
+		await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number))
+
+
+
 
 bot.run(DISCORD_TOKEN)
