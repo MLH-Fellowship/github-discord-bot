@@ -46,6 +46,13 @@ async def issues(ctx, repoName, state): # !git issues MLH-Fellowship/github-disc
 			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: https://github.com/' + repoName + '/issues/' + str(i.number))
 
 
+# display individual issue
+@bot.command()
+async def issue(ctx, repoName, number): # !git issue MLH-Fellowship/github-discord-bot 15
+	repo = g.get_repo(repoName)
+	issue = repo.get_issue(number=int(number))
+	await ctx.send('Issue Title: ' + issue.title + '\nIssue Number: ' + str(issue.number) +'\nIssue Link: https://github.com/' + repoName + '/issues/' + str(issue.number))
+
 # display open pull requests
 
 @bot.command()
@@ -58,6 +65,13 @@ async def pull_requests(ctx, repoName, state): # !git pull_requests MLH-Fellowsh
 		for pr in pulls:
 			await ctx.send('Pull Request Title: ' + pr.title + '\nPull Request Number: ' + str(pr.number) +'\nPull Request Link: https://github.com/' + repoName + '/pull/' + str(pr.number))
 
+
+# display individual PRs
+@bot.command()
+async def pull_request(ctx, repoName, number): # !git issues MLH-Fellowship/github-discord-bot open
+	repo = g.get_repo(repoName)
+	pull = repo.get_pull(number=int(number))
+	await ctx.send('Pull Request Title: ' + pull.title + '\nPull Request Number: ' + str(pull.number) +'\nPull Request Link: https://github.com/' + repoName + '/pull/' + str(pull.number))
 
 # create issue with assignee
 
