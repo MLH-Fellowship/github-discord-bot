@@ -1,4 +1,5 @@
 import os
+import json
 from github import Github
 from pprint import pprint
 import discord
@@ -15,14 +16,33 @@ bot = commands.Bot(command_prefix='!git ')
 
 user = git.get_user()
 
+with open('repos.json') as f:
+  reposDict = json.load(f)
+
+  
+
+@bot.command(brief="associate a repository to this channel")
+async def associate(ctx, repoName): #!git associate repo
+	guild = ctx.message.guild.name
+	channel = ctx.message.channel.id
+	reposDict[channel]=repoName
+	with open('repos.json', 'w') as json_file:
+		json.dump(reposDict, json_file)
+	await ctx.send('channel '+str(ctx.message.channel.id)+' guild:'+str(ctx.message.guild.name))
+
+
 @bot.command()
 async def hello(ctx): #!git hello
 	await ctx.send('Hi there '+ctx.message.author.name)
 
-
+#TODO: make repoName argument optional 
 @bot.command(brief="brief summary of repo: number of issues, prs, stars, etc. Args: repoName")
 async def summary(ctx, repoName):  #!git summary MLH-Fellowship/github-discord-bot
-	repo = git.get_repo(repoName)
+	channel = str(ctx.message.channel.id)
+	if channel in reposDict:
+		repo=git.get_repo(reposDict[channel])
+	else:
+		repo = git.get_repo(repoName)
 	pulls = repo.get_pulls(state='open', sort='created').totalCount
 	issues = repo.get_issues(state='open').totalCount - pulls
 	contributors = repo.get_contributors().totalCount
