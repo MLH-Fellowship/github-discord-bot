@@ -21,19 +21,18 @@ async def hello(ctx): #!git hello
 
 
 @bot.command(brief="brief summary of repo: number of issues, prs, stars, etc. Args: repoName")
-async def summary(ctx, repoName): 
+async def summary(ctx, repoName):  #!git summary MLH-Fellowship/github-discord-bot
 	repo = git.get_repo(repoName)
 	pulls = repo.get_pulls(state='open', sort='created').totalCount
 	issues = repo.get_issues(state='open').totalCount - pulls
 	contributors = repo.get_contributors().totalCount
-	stargazers = [ s for s in repo.get_stargazers() ]
-	await ctx.send(
-		"Stars: "+str(len(stargazers)) + '\n'
-		"Contributors: "+str(contributors) + '\n'
-		"Open issues: "+ str(issues)+'\n'+
-		"Open pull requests: "+str(pulls)+'\n'
-		
-	)
+	text = "\n".join(
+		["Stars: "+str(repo.stargazers_count), 
+		"Contributors: "+str(contributors), 
+		"Open issues: "+ str(issues),
+		"Open pull requests: "+str(pulls)
+		])
+	await ctx.send(text)
 
 
 @bot.command(aliases=['new_repo'], brief='creates a new repository. Args: repoName')
