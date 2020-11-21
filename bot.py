@@ -1,4 +1,5 @@
 import os
+import json
 from github import Github
 from pprint import pprint
 import discord
@@ -15,14 +16,44 @@ bot = commands.Bot(command_prefix='!git ')
 
 user = git.get_user()
 
+def readAssociationFile():
+	with open('repos.json', 'r') as f:
+		reposDict = json.load(f)
+	return reposDict
+
+def updateAssociationFile(channel, repoName):
+	reposDict = readAssociationFile()
+	newRepo = {channel: repoName}
+	reposDict.update(newRepo)
+	with open('repos.json', 'w') as json_file:
+		json.dump(reposDict, json_file)
+
+
+@bot.command(brief="associate a repository to this channel")
+async def associate(ctx, repoName): #!git associate repo
+	guild = ctx.message.guild.name
+	channel = str(ctx.message.channel.id)
+	updateAssociationFile(channel, repoName)
+	await ctx.send('We associated repo '+repoName+' with channel '+ctx.message.channel.name+'\n')
+
+
 @bot.command()
 async def hello(ctx): #!git hello
 	await ctx.send('Hi there '+ctx.message.author.name)
 
-
+#TODO: make repoName argument optional 
 @bot.command(brief="brief summary of repo: number of issues, prs, stars, etc. Args: repoName")
-async def summary(ctx, repoName):  #!git summary MLH-Fellowship/github-discord-bot
-	repo = git.get_repo(repoName)
+async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-discord-bot
+	repo=''
+	if repoName:
+		repo = git.get_repo(repoName)
+	else:
+		reposDict = readAssociationFile()
+		channel = str(ctx.message.channel.id)
+		if channel in reposDict:
+			repo=git.get_repo(reposDict[channel])
+		else:
+			await ctx.send("You have to specify a repository or associate one to this channel.")
 	pulls = repo.get_pulls(state='open', sort='created').totalCount
 	issues = repo.get_issues(state='open').totalCount - pulls
 	contributors = repo.get_contributors().totalCount
