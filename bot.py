@@ -93,7 +93,7 @@ async def create_branch(ctx, repoName, sourceBranch, targetBranch): #!git create
 # display open and closed issues
 
 @bot.command(brief='displays issues')
-async def issues(ctx, repoName=None, state='open'): # !git issues MLH-Fellowship/github-discord-bot open
+async def issues(ctx, max=10, state='open', repoName=None): # !git issues MLH-Fellowship/github-discord-bot open
 	repo=''
 	if repoName:
 		repo = git.get_repo(repoName)
@@ -102,25 +102,11 @@ async def issues(ctx, repoName=None, state='open'): # !git issues MLH-Fellowship
 	issues = repo.get_issues(state=state)
 	if(issues.totalCount == 0):
 		await ctx.send("There are no issues that match your query")
-	else: 
-		for i in issues:
-			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: https://github.com/' + repo.name + '/issues/' + str(i.number))
-
-@bot.command(brief='displays recent issues')
-async def recent_issues(ctx, repoName=None, state='open'): # !git recent_issues MLH-Fellowship/github-discord-bot open
-	repo=''
-	if repoName:
-		repo = git.get_repo(repoName)
-	else:
-		repo = await check_association(ctx)
-	issues = repo.get_issues(state=state)
-	if(issues.totalCount == 0):
-		await ctx.send("There are no issues that match your query")
-	else:
-		if issues.totalCount > 5:
-			issues = issues[:5]
-		for i in issues:
-			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: http
+		return
+	if issues.totalCount>max:
+		issues = issues[:max]
+	for i in issues:
+		await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: https://github.com/' + repo.name + '/issues/' + str(i.number))
 
 # display individual issue
 @bot.command()
@@ -132,7 +118,7 @@ async def issue(ctx, repoName, number): # !git issue MLH-Fellowship/github-disco
 # display open pull requests
 
 @bot.command(brief='displays pull requests')
-async def pull_requests(ctx,repoName=None, state='open'): # !git pull_requests MLH-Fellowship/github-discord-bot open
+async def pull_requests(ctx,max=5, repoName=None, state='open'): # !git pull_requests MLH-Fellowship/github-discord-bot open
 	repo=''
 	if repoName:
 		repo = git.get_repo(repoName)
@@ -141,9 +127,11 @@ async def pull_requests(ctx,repoName=None, state='open'): # !git pull_requests M
 	pulls = repo.get_pulls(state=state, sort='created')
 	if(pulls.totalCount == 0):
 		await ctx.send("There are no pull requests that match your query")
-	else:
-		for pr in pulls:
-			await ctx.send('Pull Request Title: ' + pr.title + '\nPull Request Number: ' + str(pr.number) +'\nPull Request Link: https://github.com/' + repo.name + '/pull/' + str(pr.number))
+		return
+	if pulls.totalCount>max:
+		pulls = pulls[:max]
+	for pr in pulls:
+		await ctx.send('Pull Request Title: ' + pr.title + '\nPull Request Number: ' + str(pr.number) +'\nPull Request Link: https://github.com/' + repo.name + '/pull/' + str(pr.number))
 
 
 # display individual PRs
