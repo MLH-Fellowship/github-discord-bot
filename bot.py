@@ -106,6 +106,21 @@ async def issues(ctx, repoName=None, state='open'): # !git issues MLH-Fellowship
 		for i in issues:
 			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: https://github.com/' + repo.name + '/issues/' + str(i.number))
 
+@bot.command(brief='displays recent issues')
+async def recent_issues(ctx, repoName=None, state='open'): # !git recent_issues MLH-Fellowship/github-discord-bot open
+	repo=''
+	if repoName:
+		repo = git.get_repo(repoName)
+	else:
+		repo = await check_association(ctx)
+	issues = repo.get_issues(state=state)
+	if(issues.totalCount == 0):
+		await ctx.send("There are no issues that match your query")
+	else:
+		if issues.totalCount > 5:
+			issues = issues[:5]
+		for i in issues:
+			await ctx.send('Issue Title: ' + i.title + '\nIssue Number: ' + str(i.number) +'\nIssue Link: http
 
 # display individual issue
 @bot.command()
