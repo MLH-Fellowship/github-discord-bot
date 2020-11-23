@@ -5,7 +5,8 @@ from pprint import pprint
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-
+import unittest
+from unittest import IsolatedAsyncioTestCase
 load_dotenv()
 
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -47,9 +48,14 @@ async def associate(ctx, repoName): #!git associate repo
 	await ctx.send('We associated repo '+repoName+' with channel '+ctx.message.channel.name+'\n')
 
 
+def generateResponseForHello(ctx):
+	return 'Hi there '+ctx.message.author.name
+
 @bot.command()
 async def hello(ctx): #!git hello
-	await ctx.send('Hi there '+ctx.message.author.name)
+	responseMessage = generateResponseForHello(ctx)
+	result = await ctx.send(responseMessage)
+	return result.id
 
 #TODO: make repoName argument optional 
 @bot.command(brief="brief summary of repo")
@@ -108,11 +114,15 @@ async def issues(ctx, repoName=None, state='open'): # !git issues MLH-Fellowship
 
 
 # display individual issue
+# TODO: refactor command to take in the title of the issue
 @bot.command()
 async def issue(ctx, repoName, number): # !git issue MLH-Fellowship/github-discord-bot 15
 	repo = g.get_repo(repoName)
 	issue = repo.get_issue(number=int(number))
 	await ctx.send('Issue Title: ' + issue.title + '\nIssue Number: ' + str(issue.number) +'\nIssue Link: https://github.com/' + repoName + '/issues/' + str(issue.number))
+
+
+
 
 # display open pull requests
 
@@ -151,5 +161,3 @@ async def create_issue(ctx, repoName=None,title='title', username=''): # !git cr
 	await ctx.send('Issue Title: ' + created_issue.title + '\nIssue Number: ' + str(created_issue.number) +'\nIssue Link: https://github.com/' + repo.name+ '/issues/' + str(created_issue.number))
 
 
-
-bot.run(DISCORD_TOKEN)
