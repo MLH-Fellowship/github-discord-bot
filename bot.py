@@ -5,7 +5,8 @@ from pprint import pprint
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-
+import unittest
+from unittest import IsolatedAsyncioTestCase
 load_dotenv()
 
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
@@ -13,6 +14,8 @@ git = Github(GITHUB_TOKEN)
 
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!git ')
+
+
 
 user = git.get_user()
 
@@ -45,6 +48,9 @@ async def associate(ctx, repoName): #!git associate repo
 	updateAssociationFile(channel, repoName)
 	await ctx.send('> We associated repo '+repoName+' with channel '+ctx.message.channel.name+'\n')
 
+
+def generateResponseForHello(ctx):
+	return 'Hi there '+ctx.message.author.name
 
 @bot.command()
 async def hello(ctx): #!git hello
@@ -96,6 +102,7 @@ async def issues(ctx, max=10, state='open', repoName=None): # !git issues MLH-Fe
 		await ctx.send('> Issue Title: ' + i.title + '\n > Issue Number: ' + str(i.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(i.number))
 
 # display individual issue
+# TODO: refactor command to take in the title of the issue
 @bot.command()
 async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/github-discord-bot 15
 	repo=''
@@ -105,6 +112,9 @@ async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/githu
 		repo = await check_association(ctx)
 	issue = repo.get_issue(number=int(number))
 	await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
+
+
+
 
 # display open pull requests
 
@@ -164,7 +174,4 @@ async def create_issue(ctx, repoName=None,title='title', username=''): # !git cr
 		repo = await check_association(ctx)
 	created_issue = repo.create_issue(title=title, assignee=username)
 	await ctx.send('> Issue Title: ' + created_issue.title + '\nIssue Number: ' + str(created_issue.number) +'\nIssue Link: https://github.com/' + repo.name+ '/issues/' + str(created_issue.number))
-
-
-
 '''
