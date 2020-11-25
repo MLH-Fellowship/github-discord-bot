@@ -11,7 +11,5 @@
 
 # Running Tests
 
-- example_tester.py [-h] [-c channel] [--run {all,test_reply_matches} | --stats] target_bot_id tester_bot_token
-
-
-## Example Command
+- run target bot for testing: python example_target.py $discord_target_bot_token
+- run test bot: python example_tester.py $clientId $discord_test_bot_token -c $channelId --run all
