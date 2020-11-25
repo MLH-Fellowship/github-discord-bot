@@ -4,6 +4,7 @@ from github import Github
 from pprint import pprint
 import discord
 from discord.ext import commands
+from datetime import date
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -136,6 +137,17 @@ async def pull_request(ctx, number=1, repoName=None): # !git issues MLH-Fellowsh
 	pull = repo.get_pull(number=int(number))
 	await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
 
+
+@bot.command()
+async def recent(ctx, hours=24, repoName=None):
+	today = date.today()
+	repo=''
+	if repoName:
+		repo = git.get_repo(repoName)
+	else:
+		repo = await check_association(ctx)	
+	open_issues = issues = repo.get_issues(state='open', since=str(today))
+	await ctx.send('> opened issues: '+open_issues.totalCount)
 
 bot.run(DISCORD_TOKEN)
 
