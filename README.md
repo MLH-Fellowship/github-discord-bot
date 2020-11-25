@@ -9,6 +9,9 @@
 - ``!git issue number`` - return the issue info (title, number, link) given its number
 - ``!git pull_request number`` - return the pull request info (title, number, link) given its number
 
+## Quick Demo
+![Alt Text](https://github.com/MLH-Fellowship/github-discord-bot/blob/main/bot-demo.gif)
+
 ## To use the bot on your server
 - simply copy and paste [this](https://discord.com/api/oauth2/authorize?client_id=778012965625921587&permissions=0&scope=bot) in your browser and choose the server that you want the bot to have access to. 
 - This bot has only one scope: bot. 
