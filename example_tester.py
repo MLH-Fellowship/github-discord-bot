@@ -49,10 +49,13 @@ async def test_hello_command(interface):
 
 # SINGLE ISSUE TEST
 @test_collector()
-async def test_open_issues_command(interface):
+async def test_single_issues_command(interface):
     await interface.assert_reply_equals("!git issue MLH-Fellowship/github-discord-bot 15", '> Issue Title: Associate repository to a channel\n > Issue Number: 15\n > Issue Link: https://github.com/github-discord-bot/issues/15')
 
-
+# SINGLE PULL REQUEST TEST
+@test_collector()
+async def test_single_pull_request_command(interface):
+    await interface.assert_reply_equals("!git pull_request MLH-Fellowship/github-discord-bot 27", '> Pull Request Title: added link to create repository/branch\n > Pull Request Number: 27\n > Pull Request Link: https://github.com/github-discord-bot/pull/27')
 
 
 # @test_collector()
