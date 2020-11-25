@@ -8,6 +8,9 @@
 - ``!git pull_requests`` - returns a list of prs (title, number, link). You can specify a maximum (the default is 5)
 - ``!git issue number`` - return the issue info (title, number, link) given its number
 - ``!git pull_request number`` - return the pull request info (title, number, link) given its number
+- ``!git issue_by_title title_of_issue state_of_issue`` - returns the issue info (title, number, link) given its title
+
+
 
 ## Quick Demo
 ![Alt Text](https://github.com/MLH-Fellowship/github-discord-bot/blob/main/demo.gif)
