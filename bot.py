@@ -48,7 +48,7 @@ async def associate(ctx, repoName): #!git associate repo
 
 @bot.command()
 async def hello(ctx): #!git hello
-	await ctx.send('> Hi there '+ctx.message.author.name)
+	await ctx.send('> :wave: Hi there '+ctx.message.author.name)
 
 #TODO: make repoName argument optional 
 @bot.command(brief="brief summary of repo")
@@ -67,11 +67,11 @@ async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-disc
 	text = "\n".join(filter(None,
 		[
 		"> **Repo: "+repo.name+"**",
-		"> About: "+about,
-		"> Stars: "+str(repo.stargazers_count), 
-		"> Contributors: "+str(contributors), 
-		"> Open issues: "+ str(issues),
-		"> Open pull requests: "+str(pulls)
+		"> :eyes: About: "+about,
+		"> :sparkles: Stars: "+str(repo.stargazers_count), 
+		"> :nerd: Contributors: "+str(contributors), 
+		"> :tools: Open issues:  "+ str(issues),
+		"> :tools: Open pull requests: "+str(pulls)
 		]))
 	await ctx.send(text)
 
