@@ -116,7 +116,7 @@ async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/githu
 
 # GET ISSUE BY NAME
 
-@bot.command(aliases=['get_issue_by_name'],)
+@bot.command(aliases=['get_issue_by_name'])
 async def issue_by_name(ctx, title, state, repoName=None): # !git issue_by_name title state MLH-Fellowship/github-discord-bot
 	repo=''
 	if repoName:
