@@ -162,8 +162,11 @@ async def pull_request(ctx, number=1, repoName=None): # !git pull_request 1 MLH-
 		repo = git.get_repo(repoName)
 	else:
 		repo = await check_association(ctx)
-	pull = repo.get_pull(number=int(number))
-	await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
+	try:
+		pull = repo.get_pull(number=int(number))
+		await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
+	except:
+		await ctx.send("Pull request not found")
 
 
 bot.run(DISCORD_TOKEN)
