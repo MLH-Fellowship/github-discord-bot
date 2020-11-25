@@ -15,6 +15,8 @@ git = Github(GITHUB_TOKEN)
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!git ')
 
+
+
 user = git.get_user()
 
 def readAssociationFile():
@@ -174,5 +176,4 @@ async def create_issue(ctx, repoName=None,title='title', username=''): # !git cr
 		repo = await check_association(ctx)
 	created_issue = repo.create_issue(title=title, assignee=username)
 	await ctx.send('> Issue Title: ' + created_issue.title + '\nIssue Number: ' + str(created_issue.number) +'\nIssue Link: https://github.com/' + repo.name+ '/issues/' + str(created_issue.number))
-
-
+'''

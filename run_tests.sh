@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
+python example_target.py "$TARGET_TOKEN" &
 
-python example_test.py 778012965625921587 NzgwNDMzNjgwNTA5Njk4MDY4.X7vBgQ.q2074u1VygEiccvj-waWywVMEDk 
+sleep 5s
+
+python example_tester.py "$TARGET_ID" "$TESTER_TOKEN" -c "$CHANNEL" -r all

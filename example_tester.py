@@ -1,8 +1,17 @@
 """
 A functional demo of all possible test cases. This is the format you will want to use with your testing bot.
+The command below runs it in interactive mode
     Run with:
         python example_tests.py TARGET_NAME TESTER_TOKEN
+
+
+To run the bot in cli mode:
+usage: example_tester.py [-h] [-c channel]
+                     [--run {all,test_reply_matches} | --stats]
+                     target_bot_id tester_bot_token
 """
+
+
 import asyncio
 import sys
 from distest import TestCollector
@@ -14,9 +23,9 @@ from discord import Embed
 test_collector = TestCollector()
 created_channel = None
 
-@test_collector()
-async def test_ping(CLI):
-    await CLI.assert_reply_contains("!git hello", "Hi there lcseville876")
+# @test_collector()
+# async def test_ping(interface):
+#     await interface.assert_reply_contains("!git hello", "Hi there lcseville876")
 
 
 # @test_collector()
@@ -32,9 +41,9 @@ async def test_ping(CLI):
 #     await interface.assert_reaction_equals("React with \u2714 please!", u"\u2714")
 
 
-# @test_collector()
-# async def test_reply_equals(interface):
-#     await interface.assert_reply_equals("Please say 'epic!'", "epic!")
+@test_collector()
+async def test_reply_equals(interface):
+    await interface.assert_reply_equals("ping?", "pong!")
 
 
 # @test_collector()
