@@ -6,8 +6,14 @@ It does not run the tests, just exists to have tests run on it.
 """
 import asyncio
 import sys
-
+import os
 import discord
+from github import Github
+
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+git = Github(GITHUB_TOKEN)
+
 
 client = discord.Client()
 
@@ -25,15 +31,20 @@ async def on_message(message):
     if message.author.id is client.user.id:
         return
     sent = None
-    if message.content == "ping?":
+
+
+    # Hello Command
+    if message.content == "!git hello":
         await asyncio.sleep(1)
-        sent = await message.channel.send("pong!")
-    if message.content.startswith("Say something matching the regex"):
-        await asyncio.sleep(1)
-        sent = await message.channel.send("61")
-    if message.content == "Please say 'epic!'":
-        await asyncio.sleep(1)
-        sent = await message.channel.send("epic!")
+        sent = await message.channel.send('> :wave: Hi there ' + str(client.user.name))
+    
+    # Single issue command
+    if message.content == "!git issue MLH-Fellowship/github-discord-bot 15":
+        repo = git.get_repo("MLH-Fellowship/github-discord-bot")
+        issue = repo.get_issue(number=int(15))
+        await message.channel.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
+
+
     if message.content.startswith("Say something containing 'gamer'"):
         await asyncio.sleep(1)
         sent = await message.channel.send("gamers r00l")

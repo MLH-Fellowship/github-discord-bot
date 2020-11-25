@@ -41,9 +41,18 @@ created_channel = None
 #     await interface.assert_reaction_equals("React with \u2714 please!", u"\u2714")
 
 
+# HELLO TEST
 @test_collector()
-async def test_reply_equals(interface):
-    await interface.assert_reply_equals("ping?", "pong!")
+async def test_hello_command(interface):
+    await interface.assert_reply_contains("!git hello", "> :wave: Hi there MLH-github-bot")
+
+
+# SINGLE ISSUE TEST
+@test_collector()
+async def test_open_issues_command(interface):
+    await interface.assert_reply_equals("!git issue MLH-Fellowship/github-discord-bot 15", '> Issue Title: Associate repository to a channel\n > Issue Number: 15\n > Issue Link: https://github.com/github-discord-bot/issues/15')
+
+
 
 
 # @test_collector()
