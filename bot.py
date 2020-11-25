@@ -41,7 +41,7 @@ async def check_association(ctx):
 		await ctx.send("> You have to specify a repository or associate one to this channel.")
 	return repo
 
-@bot.command(brief="associate a repo to this channel")
+@bot.command(aliases=['set_repo_name', 'repo_name'], brief="associate a repo to this channel")
 async def associate(ctx, repoName): #!git associate repo
 	guild = ctx.message.guild.name
 	channel = str(ctx.message.channel.id)
@@ -52,12 +52,12 @@ async def associate(ctx, repoName): #!git associate repo
 def generateResponseForHello(ctx):
 	return 'Hi there '+ctx.message.author.name
 
-@bot.command()
+@bot.command(aliases=['hi', 'greetings'])
 async def hello(ctx): #!git hello
 	await ctx.send('> :wave: Hi there '+ctx.message.author.name)
 
 #TODO: make repoName argument optional 
-@bot.command(brief="brief summary of repo")
+@bot.command(aliases=['info', 'get_data'], brief="brief summary of repo")
 async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-discord-bot
 	repo=''
 	if repoName:
@@ -84,7 +84,7 @@ async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-disc
 
 # display open and closed issues
 
-@bot.command(brief='displays issues')
+@bot.command(aliases=['show_issues'], brief='displays issues')
 async def issues(ctx, max=10, state='open', repoName=None): # !git issues MLH-Fellowship/github-discord-bot open
 	repo=''
 	if repoName:
@@ -103,7 +103,7 @@ async def issues(ctx, max=10, state='open', repoName=None): # !git issues MLH-Fe
 
 # display individual issue
 # TODO: refactor command to take in the title of the issue
-@bot.command()
+@bot.command(aliases=['get_issue_by_number'])
 async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/github-discord-bot 15
 	repo=''
 	if repoName:
@@ -114,11 +114,28 @@ async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/githu
 	await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
 
 
+# GET ISSUE BY NAME
+
+@bot.command(aliases=['get_issue_by_name'])
+async def issue_by_name(ctx, title, state, repoName=None): # !git issue_by_name title state MLH-Fellowship/github-discord-bot
+	repo=''
+	if repoName:
+		repo = git.get_repo(repoName)
+	else:
+		repo = await check_association(ctx)
+	issues = repo.get_issues(state=state)
+	for issue in issues:
+		if issue.title == title:
+			await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
+			return
+	await ctx.send("Issue not found")
+	
+
 
 
 # display open pull requests
 
-@bot.command(brief='displays pull requests')
+@bot.command(aliases=['pr', 'get_pr', 'get_pr_by_state'], brief='displays pull requests')
 async def pull_requests(ctx,max=5, repoName=None, state='open'): # !git pull_requests MLH-Fellowship/github-discord-bot open
 	repo=''
 	if repoName:
@@ -136,15 +153,18 @@ async def pull_requests(ctx,max=5, repoName=None, state='open'): # !git pull_req
 
 
 # display individual PRs
-@bot.command()
-async def pull_request(ctx, number=1, repoName=None): # !git issues MLH-Fellowship/github-discord-bot open
+@bot.command(aliases=['single_pr', 'pr_by_number'])
+async def pull_request(ctx, number=1, repoName=None): # !git pull_request 1 MLH-Fellowship/github-discord-bot
 	repo=''
 	if repoName:
 		repo = git.get_repo(repoName)
 	else:
 		repo = await check_association(ctx)
-	pull = repo.get_pull(number=int(number))
-	await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
+	try:
+		pull = repo.get_pull(number=int(number))
+		await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
+	except:
+		await ctx.send("Pull request not found")
 
 
 bot.run(DISCORD_TOKEN)
