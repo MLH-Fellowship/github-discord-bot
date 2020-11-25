@@ -114,10 +114,10 @@ async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/githu
 	await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
 
 
-# GET ISSUE BY NAME
+# GET ISSUE BY TITLE
 
-@bot.command(aliases=['get_issue_by_name'])
-async def issue_by_name(ctx, title, state, repoName=None): # !git issue_by_name title state MLH-Fellowship/github-discord-bot
+@bot.command(aliases=['get_issue_by_title'])
+async def issue_by_title(ctx, title, state, repoName=None): # !git issue_by_title title state MLH-Fellowship/github-discord-bot
 	repo=''
 	if repoName:
 		repo = git.get_repo(repoName)
