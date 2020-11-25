@@ -2,7 +2,6 @@ import os
 import json
 from github import Github
 from pprint import pprint
-import numpy as np
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -125,9 +124,8 @@ async def issue_by_name(ctx, title, state, repoName=None): # !git issue_by_name 
 	else:
 		repo = await check_association(ctx)
 	issues = repo.get_issues(state=state)
-	for single_issue in issues:
-		if (single_issue.title == title):
-			issue = single_issue
+	for issue in issues:
+		if issue.title == title:
 			await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
 			return
 	await ctx.send("Issue not found")
