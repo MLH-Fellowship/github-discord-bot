@@ -68,6 +68,7 @@ async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-disc
 	issues = repo.get_issues(state='open').totalCount - pulls
 	contributors = repo.get_contributors().totalCount
 	about=''
+	link = 'https://github.com/' + str(repo.owner.login)+'/'+repo.name
 	if repo.description:
 		about = repo.description[:100] #max 100 chars
 	text = "\n".join(filter(None,
@@ -77,7 +78,8 @@ async def summary(ctx, repoName=None):  #!git summary MLH-Fellowship/github-disc
 		"> :sparkles: Stars: "+str(repo.stargazers_count), 
 		"> :nerd: Contributors: "+str(contributors), 
 		"> :tools: Open issues:  "+ str(issues),
-		"> :tools: Open pull requests: "+str(pulls)
+		"> :tools: Open pull requests: "+str(pulls),
+		"> :heart: Link: "+link
 		]))
 	await ctx.send(text)
 
@@ -99,7 +101,7 @@ async def issues(ctx, max=10, state='open', repoName=None): # !git issues MLH-Fe
 		issues = issues[:max]
 	text=''
 	for i in issues:
-		await ctx.send('> Issue Title: ' + i.title + '\n > Issue Number: ' + str(i.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(i.number))
+		await ctx.send('> Issue Title: ' + i.title + '\n > Issue Number: ' + str(i.number) +'\n > Issue Link: https://github.com/' + str(repo.owner.login)+'/'+repo.name + '/issues/' + str(i.number))
 
 # display individual issue
 # TODO: refactor command to take in the title of the issue
@@ -111,7 +113,7 @@ async def issue(ctx, number=1, repoName=None): # !git issue MLH-Fellowship/githu
 	else:
 		repo = await check_association(ctx)
 	issue = repo.get_issue(number=int(number))
-	await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
+	await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + str(repo.owner.login)+'/'+repo.name + '/issues/' + str(issue.number))
 
 
 # GET ISSUE BY TITLE
@@ -126,7 +128,7 @@ async def issue_by_title(ctx, title, state, repoName=None): # !git issue_by_titl
 	issues = repo.get_issues(state=state)
 	for issue in issues:
 		if issue.title == title:
-			await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + repo.name + '/issues/' + str(issue.number))
+			await ctx.send('> Issue Title: ' + issue.title + '\n > Issue Number: ' + str(issue.number) +'\n > Issue Link: https://github.com/' + str(repo.owner.login)+'/'+repo.name + '/issues/' + str(issue.number))
 			return
 	await ctx.send("Issue not found")
 	
@@ -149,7 +151,7 @@ async def pull_requests(ctx,max=5, repoName=None, state='open'): # !git pull_req
 	if pulls.totalCount>max:
 		pulls = pulls[:max]
 	for pr in pulls:
-		await ctx.send('> Pull Request Title: ' + pr.title + '\n > Pull Request Number: ' + str(pr.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pr.number))
+		await ctx.send('> Pull Request Title: ' + pr.title + '\n > Pull Request Number: ' + str(pr.number) +'\n > Issue Link: https://github.com/' + str(repo.owner.login)+'/'+repo.name+ '/pull/' + str(pr.number))
 
 
 # display individual PRs
@@ -162,7 +164,7 @@ async def pull_request(ctx, number=1, repoName=None): # !git pull_request 1 MLH-
 		repo = await check_association(ctx)
 	try:
 		pull = repo.get_pull(number=int(number))
-		await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Pull Request Link: https://github.com/' + repo.name + '/pull/' + str(pull.number))
+		await ctx.send('> Pull Request Title: ' + pull.title + '\n > Pull Request Number: ' + str(pull.number) +'\n > Issue Link: https://github.com/' + str(repo.owner.login)+'/'+repo.name + '/pull/' + str(pull.number))
 	except:
 		await ctx.send("Pull request not found")
 
