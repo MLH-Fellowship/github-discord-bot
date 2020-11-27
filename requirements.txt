@@ -1,4 +1,5 @@
 discord.py==1.5.1
 discord==1.0.1
+distest==0.4.9
 PyGithub==1.53
 python-dotenv==0.15.0
